@@ -2,3 +2,4 @@ server/node_modules
 iot_device/update_service
 iot_device/function_service
 user_utils/utility
+user_utils/server_test
