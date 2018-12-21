@@ -69,7 +69,13 @@ var server = net.createServer((socket) => {
   });
   // Handle disconnect
   socket.on("end", () => {
-
+    Object.keys(connectedClients).forEach((index) => {
+      var val = connectedClients[index];
+      if(val == socket){
+        delete connectedClients[index];
+        console.log("Removed " + index + " from connected clients list");
+      }
+    });
   })
 });
 
