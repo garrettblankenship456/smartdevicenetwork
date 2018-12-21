@@ -7,11 +7,28 @@ int main(int argc, char** argv){
   ClientSock sock("127.0.0.1", 5623);
   sock.start();
 
-  std::string str = sock.take();
-  if(sock.getStatus() == S_CONNECTED)
-    std::cout << str << std::endl;
-  else
+  if(sock.getStatus() != S_CONNECTED){
     std::cout << "No connection to server" << std::endl;
+    return -1;
+  }
+
+  // Make do-while to ask the user to make it more flexable
+  std::string str = "";
+  std::string input = "";
+  do {
+    str = sock.take();
+    std::cout << str << std::endl;
+
+    if(str == "end"){
+      std::cout << "Closing connection" << std::endl;
+      sock.stop();
+      break;
+    }
+
+    std::cout << "> " << std::flush;
+    std::cin >> input;
+    sock.give(input);
+  } while (sock.getStatus() == S_CONNECTED);
 
   sock.stop();
 

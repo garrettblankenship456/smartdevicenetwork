@@ -10,3 +10,4 @@
 #include <netinet/in.h>
 
 // Classes
+#include "socket.hpp"
