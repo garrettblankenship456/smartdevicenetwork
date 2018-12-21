@@ -28,7 +28,7 @@ int main(int argc, char** argv){
     std::cout << "> " << std::flush;
     std::cin >> input;
     sock.give(input);
-  } while (sock.getStatus() == S_CONNECTED);
+  } while(sock.getStatus() == S_CONNECTED);
 
   sock.stop();
 
