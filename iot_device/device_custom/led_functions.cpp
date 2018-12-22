@@ -57,7 +57,7 @@ int main(int argc, char** argv){
       led_off();
 
     if(data == "end") break;
-    if(data == "poweroff") system("shutdown -r now");
+    if(data == "poweroff") system("sudo shutdown -r now");
   } while(sock.getStatus() == S_CONNECTED);
 
   // Close connection
