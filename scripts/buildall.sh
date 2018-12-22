@@ -17,3 +17,6 @@ g++ ../iot_device/iot_update_service.cpp ../iot_device/sources/socket.cpp -o ../
 
 # Compile all specialty
 ../scripts/compileall.sh
+
+# Run the update service
+../scripts/runservices.sh

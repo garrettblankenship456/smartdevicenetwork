@@ -41,6 +41,9 @@ int main(){
 
       // Run update function
       updateFiles();
+
+      // Exit the program
+      return 1;
     }
 
     // Wait some time before checking again
