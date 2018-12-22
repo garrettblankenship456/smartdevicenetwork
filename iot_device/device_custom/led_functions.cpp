@@ -12,6 +12,9 @@ int main(int argc, char** argv){
   ClientSock sock("10.0.0.191", 5623);
   sock.start();
 
+  // Setup the GPIO pins
+  system("gpio -g mode 18 out");
+
   // End if the connection hasnt been made
   if(sock.getStatus() != S_CONNECTED){
     std::cout << "Connection cannot be made!" << std::endl;
@@ -21,9 +24,11 @@ int main(int argc, char** argv){
   // IOT functions
   auto led_on = [&](){
     std::cout << "LED on" << std::endl;
+    system("gpio -g write 18 1");
   };
   auto led_off = [&](){
     std::cout << "LED off" << std::endl;
+    system("gpio -g write 18 0");
   };
 
   // Server data handling
