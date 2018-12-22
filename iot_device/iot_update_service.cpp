@@ -15,8 +15,7 @@ int main(){
 
   // Update lambda
   auto updateFiles = [&](){
-    system("git pull");
-    system("../scripts/buildall.sh");
+    system("../scripts/update.sh");
   };
 
   // If it does work then check at an interval if theres been an update
