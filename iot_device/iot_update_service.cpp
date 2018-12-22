@@ -15,7 +15,7 @@ int main(){
 
   // Update lambda
   auto updateFiles = [&](){
-    system("git fetch");
+    system("git pull");
     system("../scripts/buildall.sh");
   };
 

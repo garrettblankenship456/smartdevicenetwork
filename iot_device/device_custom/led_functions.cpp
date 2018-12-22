@@ -44,7 +44,6 @@ int main(int argc, char** argv){
   do {
     // Wait to be given a command
     data = sock.take();
-    std::cout << data << std::endl;
 
     // Controls wether the LED is on or off
     if(data == "led_on")
