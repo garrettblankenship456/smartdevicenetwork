@@ -1,5 +1,5 @@
-// This is the source file to run all the IOT functions
-#include "headers/libs.hpp"
+// This is the source file to run an LED
+#include "../headers/libs.hpp"
 
 /*
   THIS PROGRAM WILL BE SPECIALIZED FOR EACH DEVICE ACCORDING TO WHAT
@@ -9,7 +9,7 @@
 // Main function
 int main(int argc, char** argv){
   // Setup socket and connect
-  ClientSock sock("127.0.0.1", 5623);
+  ClientSock sock("10.0.0.191", 5623);
   sock.start();
 
   // End if the connection hasnt been made
@@ -19,7 +19,12 @@ int main(int argc, char** argv){
   }
 
   // IOT functions
-
+  auto led_on = [&](){
+    std::cout << "LED on" << std::endl;
+  };
+  auto led_off = [&](){
+    std::cout << "LED off" << std::endl;
+  };
 
   // Server data handling
   std::string data = "";
@@ -31,7 +36,7 @@ int main(int argc, char** argv){
   if(argc > 1)
     sock.give(argv[1]);
   else
-    sock.give("test_device");
+    sock.give("led_device");
 
   data = sock.take();
   std::cout << data << std::endl;
@@ -40,6 +45,12 @@ int main(int argc, char** argv){
     // Wait to be given a command
     data = sock.take();
     std::cout << data << std::endl;
+
+    // Controls wether the LED is on or off
+    if(data == "led_on")
+      led_on();
+    if(data == "led_off")
+      led_off();
 
     if(data == "end") break;
   } while(sock.getStatus() == S_CONNECTED);

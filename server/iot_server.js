@@ -46,8 +46,13 @@ var server = net.createServer((socket) => {
       id = data;
       setupFinished = true;
 
-      connectedClients[id] = socket;
-      console.log("New ID: " + id);
+      // Excempt any update requests as being a user
+      if(id != "update_id"){
+        connectedClients[id] = socket;
+        console.log("New ID: " + id);
+      } else {
+        console.log("Update user excempt!");
+      }
 
       socket.write("handshake");
       return;
