@@ -9,7 +9,7 @@
 // Main function
 int main(int argc, char** argv){
   // Setup socket and connect
-  ClientSock sock("127.0.0.1", 5623);
+  ClientSock sock("10.0.0.191", 5623);
   sock.start();
 
   // End if the connection hasnt been made

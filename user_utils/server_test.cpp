@@ -4,7 +4,7 @@
 // Main function
 int main(int argc, char** argv){
   // Setup socket
-  ClientSock sock("127.0.0.1", 5623);
+  ClientSock sock("10.0.0.191", 5623);
   sock.start();
 
   if(sock.getStatus() != S_CONNECTED){
@@ -26,7 +26,7 @@ int main(int argc, char** argv){
     }
 
     std::cout << "> " << std::flush;
-    
+
     std::getline(std::cin, input);
     sock.give(input);
   } while(sock.getStatus() == S_CONNECTED);
