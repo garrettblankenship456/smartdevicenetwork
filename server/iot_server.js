@@ -11,6 +11,18 @@ var config = JSON.parse(fs.readFileSync("serverconfig.json"));
 var updateNum = 0;
 var connectedClients = {};
 
+// Functions
+function getID(s){
+  Object.keys(connectedClients).forEach((index) => {
+    if(connectedClients[index] == s){
+      return index;
+    }
+  });
+}
+function getSock(i, callback){
+  callback(connectedClients[i]);
+}
+
 // Main code
 console.log("Setting up server");
 
@@ -26,6 +38,10 @@ var server = net.createServer((socket) => {
 
   // Read data
   socket.on("data", (data) => {
+    // Remove null character
+    data = data.replace(/\0[\s\S]*$/g, "");
+
+    // Setup ID
     if(setupFinished == false){
       id = data;
       setupFinished = true;
@@ -37,19 +53,18 @@ var server = net.createServer((socket) => {
       return;
     }
 
-    console.log(data);
     // Different server requests
-    if(data == "test\u0000"){ // Test
+    if(data == "test"){ // Test
       socket.write("server_test_echo");
-    } else if(data == "new_update\u0000"){ // Sending out new update
+    } else if(data == "new_update"){ // Sending out new update
       updateNum++;
       socket.write("handshake");
-    } else if(data == "check_update\u0000"){ // Checking update number
+    } else if(data == "check_update"){ // Checking update number
       socket.write(updateNum.toString());
     } else if(data.startsWith("broadcast")){
       console.log("Broadcasting command!");
       // Get the command to send
-      var cmd = data.replace(/\0[\s\S]*$/g, "").split(" ")[1];
+      var cmd = data.split(" ")[1];
 
       // Loop through each connected device and send command
       Object.keys(connectedClients).forEach((index) => {
@@ -60,8 +75,28 @@ var server = net.createServer((socket) => {
       });
 
       socket.write("handshake");
-    } else if(data == "exit\u0000"){
-      console.log("Dropped client gracefully!");
+    } else if(data.startsWith("route")) {
+      // Get the data from the given command
+      var sender = id;
+      var destination = data.split(" ")[1];
+      var command = data.split(" ")[2];
+
+      console.log("Routing command from '" + sender + "', destination: '" + destination + "' with the command '" + command + "'");
+
+      // Get the socket of the destination id and send command
+      getSock(destination, (target) => {
+        if(target != undefined){
+          target.write(command);
+          console.log(" - SENT");
+
+          socket.write("sent");
+        } else {
+          console.log(" - DESTINATION INVALID");
+
+          socket.write("dest_invalid");
+        }
+      });
+    } else if(data == "exit"){
       socket.write("end");
     } else { // Unknown
       socket.write("unknown_req");
