@@ -31,7 +31,7 @@ def clear(args):
     lcd.clear()
 def move(args):
     print("LCD shifting")
-    if len(args) < "1":
+    if len(args) < 1:
         return False
     if args[0] != "-1" or args[0] != "1":
         return False
