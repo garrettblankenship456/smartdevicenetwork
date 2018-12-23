@@ -12,11 +12,4 @@ g++ ../user_utils/server_test.cpp ../user_utils/sources/socket.cpp -o ../compile
 g++ ../user_utils/iot_util.cpp ../user_utils/sources/socket.cpp -o ../compiled/utility
 
 # IOT services
-g++ ../iot_device/iot_functions.cpp ../iot_device/sources/socket.cpp -o ../compiled/function_service
 g++ ../iot_device/iot_update_service.cpp ../iot_device/sources/socket.cpp -o ../compiled/update_service
-
-# Compile all specialty
-../scripts/compileall.sh
-
-# Run the update service
-../scripts/runservices.sh

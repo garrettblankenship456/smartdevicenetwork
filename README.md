@@ -4,3 +4,5 @@ This is a side project because im bored. It will allow devices like raspberry pi
 The server will have a few utilities made for a user to push updates to the raspberry pis and such, while the server runs and handles all the communication between them all.
 
 The server will be made in nodeJS and both the device and user utilities will be made in C++, though could change in the future.
+
+To install go into the scripts directory and run update.sh
