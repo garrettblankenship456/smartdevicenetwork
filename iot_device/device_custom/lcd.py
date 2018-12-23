@@ -31,18 +31,18 @@ def clear(args):
     lcd.clear()
 def move(args):
     print("LCD shifting")
-    if len(args) < 1:
+    if len(args) < "1":
         return False
-    if args[0] != -1 or args[0] != 1:
+    if args[0] != "-1" or args[0] != "1":
         return False
 
-    if args[0] == 1:
+    if args[0] == "1":
         lcd.move_right()
     else:
         lcd.move_left()
 def backlight(args):
     print("LCD backlight command")
-    lcd.set_backlight(args[0])
+    lcd.set_backlight(int(args[0]))
 
 # Setup device
 device = iot.IOT("10.0.0.191", 5623) # Define the ID, first argument is IP, second argument is the port
@@ -53,7 +53,7 @@ device.setID("lcd_device") # Set the ID of the IOT device
 device.defineCommand("display", display)
 device.defineCommand("clear", clear)
 device.defineCommand("move", move)
-device.defineCommand("backlight", backlight))
+device.defineCommand("backlight", backlight)
 
 # Keep looping the take command so it doesnt quit
 try: # Make sure to cleanly exit
