@@ -3,11 +3,15 @@
 # Requirements
 import socket
 from time import sleep
+import sys
 
 # Different default commands
 def echoFunc(args):
     message = " ".join(args)
     print(message)
+
+def stop(args):
+    sys.exit(0)
 
 # Classes
 class IOT:
@@ -21,7 +25,8 @@ class IOT:
 
         # Dictionary to hold all the commands avaialble to the device
         self.commands = {
-            "echo": echoFunc
+            "echo": echoFunc,
+            "stop_device": stop
         }
 
     # Connecting functions

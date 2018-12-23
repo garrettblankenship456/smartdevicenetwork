@@ -69,7 +69,7 @@ var server = net.createServer((socket) => {
     } else if(data.startsWith("broadcast")){
       console.log("Broadcasting command!");
       // Get the command to send
-      var cmd = data.split(" ")[1];
+      var cmd = data.split(" ").splice(1).join(" ");
 
       // Loop through each connected device and send command
       Object.keys(connectedClients).forEach((index) => {
