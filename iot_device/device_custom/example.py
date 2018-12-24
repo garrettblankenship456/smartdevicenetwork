@@ -3,11 +3,9 @@ import sys
 sys.path.insert(0, "..")
 import iot
 
-test = iot.IOT("10.0.0.191", 5623) # Define the ID, first argument is IP, second argument is the port
+test = iot.IOT("iot_script_test", "10.0.0.191", 5623) # Define the ID, first argument is IP, second argument is the port
 test.start() # Start the connection to the IOT server
 
-# Setup ID after handshake
-test.setID("iot_script_test") # Set the ID of the IOT device
 
 print("\n====================== UPDATE ======================")
 print("Current version: " + test.currentVersion)

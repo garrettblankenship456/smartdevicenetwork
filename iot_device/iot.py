@@ -16,12 +16,12 @@ def stop(args):
 # Classes
 class IOT:
     # Constructor
-    def __init__(self, hostname, port):
+    def __init__(self, id, hostname, port):
         self.hostname = hostname # Set hostname
         self.port = port # Set port
         self.sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM) # Create socket
-        self.idSet = False # If the ID has ever been set
         self.currentVersion = "0" # Check for version
+        self.id = id
 
         # Dictionary to hold all the commands avaialble to the device
         self.commands = {
@@ -32,18 +32,23 @@ class IOT:
     # Connecting functions
     def start(self):
         print("Connecting to IOT server")
+        self.sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
         # Check if it connected or not
         try:
-            self.sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
             self.sock.connect((self.hostname, self.port))
             self.sock.recv(4096)
-            print("Connected to server")
-            return True
         except ConnectionRefusedError:
             print("Could not connect to server... Retrying in 10 seconds");
             sleep(10)
             self.start()
+            return False
+
+        # Return true once connected
+        print("Connected to server")
+        self.sock.send(self.id.encode("utf8"))
+        self.sock.recv(4096)
+        return True
 
     # Disconnecting functions
     def stop(self):
@@ -59,8 +64,11 @@ class IOT:
             self.sock.send(data)
         except BrokenPipeError:
             print("Server not available")
-            if self.start() == True:
-                self.give(data.decode("utf8"))
+            while self.start() != True:
+                print("Trying");
+
+            self.give(data.decode("utf8"))
+            print("Reconnected!")
 
     def take(self):
         # Receive data and return it
@@ -74,8 +82,11 @@ class IOT:
                     data = self.sock.recv(4096)
         except OSError:
             print("Server not available")
-            if self.start() == True:
-                data = self.take()
+            while self.start() != True:
+                print("Trying");
+
+            data = self.take()
+            print("Reconnected!")
 
 
         data = data.decode("utf8")
@@ -87,15 +98,6 @@ class IOT:
         pass
 
     # IOT specific functions (Make specific server calls easier)
-    def setID(self, id):
-        # Check if the ID has already been set
-        if self.idSet == False:
-            self.give(id) # Send ID
-            self.take() # Wait for handshake
-            return True
-        else:
-            return False
-
     def checkUpdate(self):
         # Send server check update request
         self.give("check_update")

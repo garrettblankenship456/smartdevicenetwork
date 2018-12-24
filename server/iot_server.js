@@ -29,6 +29,7 @@ console.log("Setting up server");
 // Setup update server
 var server = net.createServer((socket) => {
   try {
+    console.log("Client connected");
     socket.setEncoding("utf8");
 
     // Let the user you know your there

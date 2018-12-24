@@ -25,9 +25,8 @@ def led(args):
         os.system("gpio -g write 18 0")
 
 # Setup device
-device = iot.IOT("10.0.0.191", 5623) # Define the ID, first argument is IP, second argument is the port
+device = iot.IOT("iot_script_test", "10.0.0.191", 5623) # Define the ID, first argument is IP, second argument is the port
 device.start() # Start the connection to the IOT server
-device.setID("led_device") # Set the ID of the IOT device
 
 # Define functions with the device
 device.defineCommand("led_on", led_on)
