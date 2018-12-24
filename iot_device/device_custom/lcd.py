@@ -49,6 +49,8 @@ def shutdown(args):
 # Setup device
 device = iot.IOT("lcd_display", "10.0.0.191", 5623) # Define the ID, first argument is IP, second argument is the port
 device.start() # Start the connection to the IOT server
+
+lcd.clear()
 lcd.message("Connected!")
 
 # Define functions with the device
