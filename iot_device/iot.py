@@ -35,6 +35,7 @@ class IOT:
 
         # Check if it connected or not
         try:
+            self.sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
             self.sock.connect((self.hostname, self.port))
             self.sock.recv(4096)
             print("Connected to server")
@@ -66,6 +67,11 @@ class IOT:
         # Convert bytes to data
         try:
             data = self.sock.recv(4096)
+
+            if data == b'':
+                print("Server disconnection!")
+                if self.start() == True:
+                    data = self.sock.recv(4096)
         except OSError:
             print("Server not available")
             if self.start() == True:
