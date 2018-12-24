@@ -40,7 +40,7 @@ def clear(args):
     strip.show()
 
 # Setup device
-device = iot.IOT("iot_script_test", "10.0.0.191", 5623) # Define the ID, first argument is IP, second argument is the port
+device = iot.IOT("led_strip", "10.0.0.191", 5623) # Define the ID, first argument is IP, second argument is the port
 device.start() # Start the connection to the IOT server
 
 # Define functions with the device

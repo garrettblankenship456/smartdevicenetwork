@@ -47,8 +47,9 @@ def shutdown(args):
     os.system("sudo init 0")
 
 # Setup device
-device = iot.IOT("iot_script_test", "10.0.0.191", 5623) # Define the ID, first argument is IP, second argument is the port
+device = iot.IOT("lcd_display", "10.0.0.191", 5623) # Define the ID, first argument is IP, second argument is the port
 device.start() # Start the connection to the IOT server
+lcd.message("Connected!")
 
 # Define functions with the device
 device.defineCommand("display", display)
