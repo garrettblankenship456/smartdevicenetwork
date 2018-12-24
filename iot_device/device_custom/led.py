@@ -1,3 +1,4 @@
+#!/usr/bin/python3
 # Script to control LED commands
 import sys
 import os

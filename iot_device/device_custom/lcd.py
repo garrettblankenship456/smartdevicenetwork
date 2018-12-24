@@ -1,3 +1,4 @@
+#!/usr/bin/python3
 # Script to control LCD commands
 import sys
 import os
