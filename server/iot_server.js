@@ -31,7 +31,12 @@ var server = net.createServer((socket) => {
   socket.setEncoding("utf8");
 
   // Let the user you know your there
-  socket.write("handshake");
+  try {
+    socket.write("handshake");
+  } catch(e){
+    console.log(e);
+    socket.close();
+  }
 
   var setupFinished = false;
   var id = "";
@@ -54,18 +59,39 @@ var server = net.createServer((socket) => {
         console.log("Update user excempt!");
       }
 
-      socket.write("handshake");
+      try {
+        socket.write("handshake");
+      } catch(e){
+        console.log(e);
+        socket.close();
+      }
       return;
     }
 
     // Different server requests
     if(data == "test"){ // Test
-      socket.write("server_test_echo");
+      try {
+        socket.write("server_test_echo");
+      } catch(e){
+        console.log(e);
+        socket.close();
+      }
     } else if(data == "new_update"){ // Sending out new update
       updateNum++;
-      socket.write("handshake");
+
+      try {
+        socket.write("handshake");
+      } catch(e){
+        console.log(e);
+        socket.close();
+      }
     } else if(data == "check_update"){ // Checking update number
-      socket.write(updateNum.toString());
+      try {
+        socket.write(updateNum.toString());
+      } catch(e){
+        console.log(e);
+        socket.close();
+      }
     } else if(data.startsWith("broadcast")){
       console.log("Broadcasting command!");
       // Get the command to send
@@ -79,7 +105,12 @@ var server = net.createServer((socket) => {
         }
       });
 
-      socket.write("handshake");
+      try {
+        socket.write("handshake");
+      } catch(e){
+        console.log(e);
+        socket.close();
+      }
     } else if(data.startsWith("route")) {
       // Get the data from the given command
       var sender = id;
@@ -91,20 +122,45 @@ var server = net.createServer((socket) => {
       // Get the socket of the destination id and send command
       getSock(destination, (target) => {
         if(target != undefined){
-          target.write(command);
+          try {
+            target.write(command);
+          } catch(e){
+            console.log(e);
+            target.close();
+          }
           console.log(" - SENT");
 
-          socket.write("sent");
+          try {
+            socket.write("sent");
+          } catch(e){
+            console.log(e);
+            socket.close();
+          }
         } else {
           console.log(" - DESTINATION INVALID");
 
-          socket.write("dest_invalid");
+          try {
+            socket.write("dest_invalid");
+          } catch(e){
+            console.log(e);
+            socket.close();
+          }
         }
       });
     } else if(data == "exit"){
-      socket.write("end");
+      try {
+        socket.write("end");
+      } catch(e){
+        console.log(e);
+        socket.close();
+      }
     } else { // Unknown
-      socket.write("unknown_req");
+      try {
+        socket.write("unknown_req");
+      } catch(e){
+        console.log(e);
+        socket.close();
+      }
     }
   });
   // Handle disconnect

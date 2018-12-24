@@ -38,8 +38,11 @@ class IOT:
             self.sock.connect((self.hostname, self.port))
             self.sock.recv(4096)
             print("Connected to server")
+            return True
         except ConnectionRefusedError:
-            print("Could not connect to server");
+            print("Could not connect to server... Retrying in 10 seconds");
+            sleep(10)
+            self.start()
 
     # Disconnecting functions
     def stop(self):
@@ -50,14 +53,27 @@ class IOT:
     def give(self, data):
         # Convert to bytes
         data = data.encode("utf8")
-        # Send data
-        self.sock.send(data)
+        # Send data, if the server is down try reconnecting
+        try:
+            self.sock.send(data)
+        except BrokenPipeError:
+            print("Server not available")
+            if self.start() == True:
+                self.give(data.decode("utf8"))
 
     def take(self):
         # Receive data and return it
-        data = self.sock.recv(4096)
         # Convert bytes to data
+        try:
+            data = self.sock.recv(4096)
+        except OSError:
+            print("Server not available")
+            if self.start() == True:
+                data = self.take()
+
+
         data = data.decode("utf8")
+
         return data
 
     # Update function
