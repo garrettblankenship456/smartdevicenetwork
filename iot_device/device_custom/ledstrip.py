@@ -32,12 +32,12 @@ def ledOn(args):
     color = Color(int(args[0]), int(args[1]), int(args[2]))
     for i in args[3:]:
         strip.setPixelColor(int(i), color)
-	strip.show()
+    strip.show()
 def clear(args):
     print("LEDs clearing")
     for i in range(strip.numPixels()):
         strip.setPixelColor(i, Color(0, 0, 0))
-	strip.show()
+    strip.show()
 
 # Setup device
 device = iot.IOT("iot_script_test", "10.0.0.191", 5623) # Define the ID, first argument is IP, second argument is the port
