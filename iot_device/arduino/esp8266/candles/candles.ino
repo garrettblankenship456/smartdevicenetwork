@@ -59,25 +59,11 @@ void setup() {
   Serial.println("Connected to IOT and ID has been set!");
 }
 
-bool seen = false;
 void loop() {
-  // Get input
-  if(Serial.available()){
-    lastWrote = Serial.readStringUntil('\n');
-    Serial.println(lastWrote);
-
-    seen = false;
-  }
-
-  // Send it to the server
-  client.print(lastWrote);
-
-  // Receive any data back
-  delay(500);
+  // Receive any data
   String line = "";
-  while(client.available() && seen == false){
+  while(client.available()){
     line = client.readStringUntil('\n');
     Serial.println(line);
-    seen = true;
   }
 }

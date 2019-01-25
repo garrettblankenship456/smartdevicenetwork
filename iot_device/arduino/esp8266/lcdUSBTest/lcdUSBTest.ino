@@ -4,8 +4,8 @@
 #include <ESP8266WiFi.h>
 
 // Wifi settings
-const char* ssid = "Tina-2.4";
-const char* password = "family5!";
+const char* ssid = "";
+const char* password = "";
 
 // Server settings
 const uint16_t port = 5623;
@@ -44,7 +44,7 @@ void setup() {
 
     delay(1000);
   }
-  
+
   // Wait for handshake
   delay(500);
   while(client.available()){
