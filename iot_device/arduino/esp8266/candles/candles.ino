@@ -16,11 +16,11 @@ WiFiClient client;
 String lastWrote = "";
 
 // Functions
-void setID(){
+void setID() {
   client.print("iot_remote");
 
   delay(500);
-  while(client.available()){
+  while (client.available()) {
     String line = client.readStringUntil('\n');
     Serial.println(line);
   }
@@ -30,9 +30,13 @@ void setID(){
 void setup() {
   Serial.begin(115200);
 
+  // Initialize digital pins
+  pinMode(0, OUTPUT);
+  pinMode(2, OUTPUT);
+
   // Connect to wifi
   WiFi.begin(ssid, password);
-  while(WiFi.status() != WL_CONNECTED){
+  while (WiFi.status() != WL_CONNECTED) {
     delay(500);
     Serial.println("...");
   }
@@ -42,7 +46,7 @@ void setup() {
 
   // Connect to IOT server and set up the ID
   Serial.println("Connecting to IOT");
-  while(!client.connect(host, port)){
+  while (!client.connect(host, port)) {
     Serial.println("Failed to connected to IOT server");
 
     delay(1000);
@@ -50,7 +54,7 @@ void setup() {
 
   // Wait for handshake
   delay(500);
-  while(client.available()){
+  while (client.available()) {
     String line = client.readStringUntil('\n');
     Serial.println(line);
   }
@@ -62,8 +66,23 @@ void setup() {
 void loop() {
   // Receive any data
   String line = "";
-  while(client.available()){
+  while (client.available()) {
     line = client.readStringUntil('\n');
     Serial.println(line);
+
+    // Run digital writing based on the command given
+    if(line == "on"){
+      Serial.println("Turning on candles...");
+
+      digitalWrite(0, HIGH);
+      delay(1000);
+      digitalWrite(0, LOW);
+    } else if(line == "off"){
+      Serial.println("Turning off candles...");
+
+      digitalWrite(2, HIGH);
+      delay(1000);
+      digitalWrite(2, LOW);
+    }
   }
 }

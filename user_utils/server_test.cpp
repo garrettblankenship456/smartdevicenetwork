@@ -4,7 +4,7 @@
 // Main function
 int main(int argc, char** argv){
   // Setup socket
-  ClientSock sock("10.0.0.191", 5623);
+  ClientSock sock("192.168.1.97", 5623);
   sock.start();
 
   if(sock.getStatus() != S_CONNECTED){

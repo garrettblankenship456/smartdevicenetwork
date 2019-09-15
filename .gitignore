@@ -1,4 +1,4 @@
 server/node_modules
-compiled/*
+compiled/
 */__pycache__
 *.pyc

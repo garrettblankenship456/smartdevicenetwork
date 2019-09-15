@@ -7,7 +7,7 @@ import speech_recognition as sr
 import iot
 
 # Initialize IOT
-device = iot.IOT("controller", "10.0.0.97", 5623)
+device = iot.IOT("controller", "192.168.1.97", 5623)
 device.start()
 
 def shutdown():
