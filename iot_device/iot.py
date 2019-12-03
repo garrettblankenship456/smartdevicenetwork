@@ -4,6 +4,7 @@
 import socket
 from time import sleep
 import sys
+import os
 
 # Different default commands
 def echoFunc(args):
@@ -39,7 +40,7 @@ class IOT:
             self.sock.connect((self.hostname, self.port))
             self.sock.recv(4096)
         except ConnectionRefusedError:
-            print("Could not connect to server... Retrying in 10 seconds");
+            print("Could not connect to server... Retrying in 10 seconds")
             sleep(10)
             self.start()
             return False
@@ -65,7 +66,7 @@ class IOT:
         except BrokenPipeError:
             print("Server not available")
             while self.start() != True:
-                print("Trying");
+                print("Trying")
 
             self.give(data.decode("utf8"))
             print("Reconnected!")
@@ -83,7 +84,7 @@ class IOT:
         except OSError:
             print("Server not available")
             while self.start() != True:
-                print("Trying");
+                print("Trying")
 
             data = self.take()
             print("Reconnected!")
@@ -95,7 +96,8 @@ class IOT:
 
     # Update function
     def update(self):
-        pass
+        # Git fetch and pull
+        os.system("git fetch && git pull")
 
     # IOT specific functions (Make specific server calls easier)
     def checkUpdate(self):
