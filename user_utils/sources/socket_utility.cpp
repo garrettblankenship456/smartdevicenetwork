@@ -10,15 +10,15 @@ int main(int argc, char** argv){
   unsigned int port;
 
   // Inputs
-  if(argc < 1){
+  if(argc < 2){
     // No arguments provided, all defaults
     host = "127.0.0.1";
     port = 5623;
-  } else if(argc < 2){
+  } else if(argc < 3){
     // One argument provided, its the ip first and then default port
     host = argv[1];
     port = 5623;
-  } else if(argc < 3){
+  } else if(argc < 4){
     // Two arguments provided, ip and port
     host = argv[1];
     port = atoi(argv[2]);
