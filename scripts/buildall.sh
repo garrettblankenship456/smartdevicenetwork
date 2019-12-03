@@ -9,6 +9,3 @@ mkdir ../compiled
 
 # User utilities
 g++ ../user_utils/sources/socket_utility.cpp ../user_utils/sources/socket.cpp -o ../compiled/socket_utility
-
-# IOT services
-g++ ../iot_device/iot_update_service.cpp ../iot_device/sources/socket.cpp -o ../compiled/update_service
