@@ -23,11 +23,16 @@ def transmitDecimal(args):
 
 def receiveDecimal(args):
     # Receive the code with given parameters
-    while rfRecv.rx_code_timestamp == recvTime:
-        time.sleep(0.01) # Stall program until received a transmission
+    while True:
+        # Check if code changed
+        if rfRecv.rx_code_timestamp != recvTime:
+            lastCodeReceived = rfRecv.rx_code
+            print("Received code:", lastCodeReceived)
 
-    print("Received code!")
-    lastCodeReceived = rfRecv.rx_code
+            # End loop
+            break
+
+        time.sleep(0.01) # Stall program until received a transmission
 
 def sendLastCode(args):
     # Skip if no last code
