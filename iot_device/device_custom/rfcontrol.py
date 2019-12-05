@@ -81,6 +81,7 @@ def addCode(args):
         time.sleep(0.1)
 
     # Adds a code to a database
+    print("Code written")
     codes = getCodes()
     codes[name] = {
         "code": lastCodeReceived,
