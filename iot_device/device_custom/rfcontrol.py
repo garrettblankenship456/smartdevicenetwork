@@ -18,10 +18,17 @@ lastCodeReceived = None
 
 # Create receive thread
 def receiveData():
+    # Open globals
+    global recvTime
+    global lastCodeReceived
+
     # Receive the code with given parameters
+    print("Listening")
     while rfRecv.rx_enabled:
         # Check if code changed
         if rfRecv.rx_code_timestamp != recvTime:
+            recvTime = rfRecv.rx_code_timestamp
+
             lastCodeReceived = rfRecv.rx_code
             print("Received code:", lastCodeReceived)
 
@@ -41,9 +48,12 @@ def receiveDecimal(args):
 
 def sendLastCode(args):
     # Skip if no last code
-    if lastCodeReceived == None: return
+    if lastCodeReceived == None:
+        print("No valid code.")
+        return
 
     # Send the TX of the last code
+    print("Transmitting code:", lastCodeReceived)
     transmitDecimal([lastCodeReceived, 1, 180])
 
 # Initialize IOT
@@ -72,6 +82,6 @@ except KeyboardInterrupt:
 rfIOT.stop() # Stop the command to the IOT server
 
 # Cleanup RF
-dataThread.join()
 rfRecv.cleanup()
 rfTrans.cleanup()
+dataThread.join()
