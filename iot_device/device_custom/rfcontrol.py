@@ -125,6 +125,7 @@ print("====================================================\n")
 # Define commands
 rfIOT.defineCommand("transmit", transmitDecimal)
 rfIOT.defineCommand("add_code", addCode)
+rfIOT.defineCommand("send_code", sendCode)
 rfIOT.defineCommand("send_last", sendLastCode)
 
 # Accept commands
