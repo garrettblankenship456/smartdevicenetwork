@@ -2,6 +2,7 @@
 import sys
 import time
 from rpi_rf import RFDevice
+import threading
 sys.path.insert(0, "..")
 import iot
 
@@ -15,6 +16,20 @@ rfTrans.enable_tx()
 recvTime = None
 lastCodeReceived = None
 
+# Create receive thread
+def receiveData():
+    # Receive the code with given parameters
+    while rfRecv.rx_enabled:
+        # Check if code changed
+        if rfRecv.rx_code_timestamp != recvTime:
+            lastCodeReceived = rfRecv.rx_code
+            print("Received code:", lastCodeReceived)
+
+        time.sleep(0.01) # Stall program until received a transmission
+
+dataThread = threading.Thread(target=receiveData, args=())
+dataThread.start()
+
 # Define command functions
 def transmitDecimal(args):
     # Transmits the code with given parameters
@@ -22,17 +37,7 @@ def transmitDecimal(args):
     rfTrans.tx_code(int(args[0]), int(args[1]), int(args[2]))
 
 def receiveDecimal(args):
-    # Receive the code with given parameters
-    while True:
-        # Check if code changed
-        if rfRecv.rx_code_timestamp != recvTime:
-            lastCodeReceived = rfRecv.rx_code
-            print("Received code:", lastCodeReceived)
-
-            # End loop
-            break
-
-        time.sleep(0.01) # Stall program until received a transmission
+    pass
 
 def sendLastCode(args):
     # Skip if no last code
@@ -67,5 +72,6 @@ except KeyboardInterrupt:
 rfIOT.stop() # Stop the command to the IOT server
 
 # Cleanup RF
+dataThread.join()
 rfRecv.cleanup()
 rfTrans.cleanup()
