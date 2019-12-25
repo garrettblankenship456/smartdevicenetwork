@@ -69,7 +69,7 @@ def transmitDecimal(args):
     print("Transmitting code!")
     rfTrans.tx_code(int(args[0]), int(args[1]), int(args[2]))
 
-def addCode(args):
+def addCode(args, sender):
     # Define data
     name = args[0]
 
@@ -79,6 +79,9 @@ def addCode(args):
     
     while recvTime < startTime:
         time.sleep(0.1)
+
+    # Acknowledge the code and test it, let the sender know
+    rfIOT.give("route " + sender + " testing_code " + lastCodeReceived + " " + lastPulseLength + " " + lastProtocol)
 
     # Adds a code to a database
     print("Code written")

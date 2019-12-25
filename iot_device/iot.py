@@ -120,13 +120,14 @@ class IOT:
             # Get command data
             cmd = self.take()
             cmd = cmd.split(" ")
-            args = cmd[1:]
-            cmd = cmd[0]
+            args = cmd[2:]
+            cmd = cmd[1]
+            sender = cmd[0]
 
             # Check if you have the command
             for c in self.commands:
                 if c == cmd:
-                    self.commands[c](args)
+                    self.commands[c](args, sender)
                     success = True
 
     def defineCommand(self, commandName, commandFunction):
