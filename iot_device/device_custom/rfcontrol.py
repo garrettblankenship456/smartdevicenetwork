@@ -1,11 +1,11 @@
 # IOT RF controller
 import sys
 import time
-from rpi_rf import RFDevice
+from rpi_rf import RFDevice # pylint: disable=import-error
 import json
 import threading
 sys.path.insert(0, "..")
-import iot
+import iot # pylint: disable=import-error
 
 # Initialize RF devices
 rfRecv = RFDevice(27)
