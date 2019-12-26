@@ -90,7 +90,7 @@ var server = net.createServer((socket) => {
         // Create command
         var command = data.split(" ").slice(2);
         command.unshift(sender);
-        command.join(" ");
+        command = command.join(" ");
 
         console.log("Routing command from '" + sender + "', destination: '" + destination + "' with the command '" + command + "'");
 
