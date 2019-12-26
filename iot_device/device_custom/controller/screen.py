@@ -4,6 +4,11 @@
 from graphics import *
 import time
 
+# Config
+BUTTON_SIZE_X = 80
+BUTTON_SIZE_Y = 40
+BUTTON_PADDING = 10
+
 # Class definition
 class Screen:
     """Controls all the buttons and button definitions"""
@@ -34,8 +39,8 @@ class Screen:
             # Get button to modify
             button = self.buttons[i]
 
-            # Create shape for each button
-            button.shape = Rectangle(Point(10 + 50 * column, 50 + 50 * row), Point(50 + 50 * column, 90 + 50 * row))
+            # Move button into position
+            button.setPos(10 + (BUTTON_SIZE_X + BUTTON_PADDING) * column, 50 + (BUTTON_SIZE_Y + BUTTON_PADDING) * row)
             button.text = Text(button.shape.getCenter(), button.name)
 
             # Draw the button shape
@@ -45,7 +50,7 @@ class Screen:
             # Increment row and or column
             column += 1
 
-            if column > self.window.getWidth() // 60:
+            if column >= self.window.getWidth() // (BUTTON_SIZE_X + BUTTON_PADDING):
                 column = 0
                 row += 1
 
@@ -55,8 +60,6 @@ class Screen:
             # Undraw and remove the shape
             button.shape.undraw()
             button.text.undraw()
-            button.shape = None
-            button.text = None
 
     def addButton(self, button):
         """Adds a button to be drawn with the name type and function given"""
@@ -108,8 +111,22 @@ class Button:
     def __init__(self, name:str):
         # Initialize
         self.name = name
-        self.shape = None
-        self.text = None
+        self.shape = Rectangle(Point(0, 0), Point(BUTTON_SIZE_X, BUTTON_SIZE_Y))
+        self.text = Text(self.shape.getCenter(), name)
+
+        # Set colors
+        self.shape.setFill("white")
+
+    # Set position function
+    def setPos(self, x, y):
+        """Sets position of the button on the screen"""
+        # Get current position
+        curX = self.shape.getP1().getX()
+        curY = self.shape.getP1().getY()
+
+        # Move to new position
+        self.shape.move(x - curX, y - curY)
+        self.text.move(x - curX, y - curY)
 
     # Use function
     def use(self):
@@ -126,8 +143,14 @@ class Push(Button):
 
     # Define the use
     def use(self):
+        # Set color of button to be a slightly grayed out
+        self.shape.setFill(color_rgb(180, 180, 180))
+
         # Call the function
         self.function()
+
+        # Return color
+        self.shape.setFill("white")
 
 class Toggle(Button):
     """Toggle button, two functions executed one for on and one for off"""
@@ -147,37 +170,12 @@ class Toggle(Button):
 
         # Call the function based on the state
         if self.state:
+            self.shape.setFill("white")
             success = self.offFunction()
         else:
+            self.shape.setFill(color_rgb(180, 180, 180))
             success = self.onFunction()
 
         # Toggle state if the commands were successful
         if success:
             self.state = not self.state
-
-
-# Test function
-def testFunc():
-    print("Hello world")
-    return True
-
-def onFunc():
-    print("On fucntion")
-    return True
-
-def offFunc():
-    print("Off function")
-    return True
-
-if __name__ == "__main__":
-    # Create new class and run it
-    s = Screen(600, 350)
-
-    s.addButton(Push("test", testFunc))
-    s.addButton(Toggle("toggle", onFunc, offFunc))
-
-    while True:
-        cPos = s.window.getMouse()
-        s.checkClick(cPos)
-
-    s.window.getMouse()
