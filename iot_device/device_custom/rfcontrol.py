@@ -84,13 +84,26 @@ def addCode(args, sender):
     rfIOT.give("route " + sender + " testing_code " + lastCodeReceived + " " + lastPulseLength + " " + lastProtocol)
 
     # Adds a code to a database
-    print("Code written")
+    print("Code test")
     codes = getCodes()
     codes[name] = {
         "code": lastCodeReceived,
         "pulse": lastPulseLength,
         "proto": lastProtocol
     }
+
+    # Wait 5 seconds, then send the code
+    time.sleep(5)
+    sendCode([codes[name]], sender)
+
+    # Wait for response
+    res = rfIOT.take()
+    if res != sender + "accepted":
+        print("Code not correct, end execution before saving")
+        return
+
+    # Write the codes to file if successful
+    print("Code written")
     writeCodes(codes)
 
 def sendCode(args, sender):
@@ -114,7 +127,7 @@ def sendLastCode(args, sender):
 
     # Send the TX of the last code
     print("Transmitting code:", lastCodeReceived)
-    transmitDecimal([lastCodeReceived, 1, 180], sender)
+    transmitDecimal([lastCodeReceived, lastProtocol, lastPulseLength], sender)
 
 # Initialize IOT
 rfIOT = iot.IOT("rfcontrol", "iotserver", 5623) # Define the ID, first argument is IP, second argument is the port
