@@ -77,11 +77,12 @@ def addCode(args, sender):
     print("Listening to keypress")
     startTime = (time.perf_counter() * 1000000)
     
-    while recvTime < startTime:
+    while recvTime == None or recvTime < startTime:
         time.sleep(0.1)
 
     # Acknowledge the code and test it, let the sender know
-    rfIOT.give("route " + sender + " testing_code " + lastCodeReceived + " " + lastPulseLength + " " + lastProtocol)
+    rfIOT.give("route " + sender + " testing_code " + str(lastCodeReceived) + " " + str(lastPulseLength) + " " + str(lastProtocol))
+    rfIOT.take()
 
     # Adds a code to a database
     print("Code test")
@@ -94,11 +95,11 @@ def addCode(args, sender):
 
     # Wait 5 seconds, then send the code
     time.sleep(5)
-    sendCode([codes[name]], sender)
+    transmitDecimal([lastCodeReceived, lastProtocol, lastPulseLength], sender)
 
     # Wait for response
     res = rfIOT.take()
-    if res != sender + "accepted":
+    if res != sender + " accepted":
         print("Code not correct, end execution before saving")
         return
 
