@@ -78,6 +78,31 @@ class Screen:
 
         self.drawButtons()
 
+    def checkClick(self, clickPos):
+        """Returns true or false and executes function depending on if the button has been clicked with the position given"""
+        # Declare variables to make it easier to work with
+        x = clickPos.getX()
+        y = clickPos.getY()
+
+        # Check values to every button
+        for button in self.buttons:
+            # Get button data
+            xPos1 = button.shape.getP1().getX()
+            yPos1 = button.shape.getP1().getY()
+            xPos2 = button.shape.getP2().getX()
+            yPos2 = button.shape.getP2().getY()
+
+            # Compare data
+            if x > xPos1 and x < xPos2:
+                if y > yPos1 and y < yPos2:
+                    # Its been pressed
+                    button.use()
+
+                    return True
+
+        # None ended execution so no buttons were pressed, return false
+        return False
+
 # Parent class for buttons
 class Button:
     def __init__(self, name:str):
@@ -136,10 +161,23 @@ def testFunc():
     print("Hello world")
     return True
 
+def onFunc():
+    print("On fucntion")
+    return True
+
+def offFunc():
+    print("Off function")
+    return True
+
 if __name__ == "__main__":
     # Create new class and run it
     s = Screen(600, 350)
 
     s.addButton(Push("test", testFunc))
+    s.addButton(Toggle("toggle", onFunc, offFunc))
+
+    while True:
+        cPos = s.window.getMouse()
+        s.checkClick(cPos)
 
     s.window.getMouse()
