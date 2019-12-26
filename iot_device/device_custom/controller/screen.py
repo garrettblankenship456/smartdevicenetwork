@@ -18,7 +18,8 @@ class Screen:
         self.window = GraphWin("Controller", xSize, ySize)
 
         # Remove title bar
-        self.window.master.overrideredirect(True)
+        self.window.master.overrideredirect(True)   
+        self.window.master.geometry("+0+0")
 
         # Initialize custom title
         title = Text(Point(65, 20), "Smart home")
@@ -105,6 +106,11 @@ class Screen:
 
         # None ended execution so no buttons were pressed, return false
         return False
+
+    def press(self):
+        """Runs checkClick after getting a keypress"""
+        cPos = self.window.getMouse()
+        self.checkClick(cPos)
 
 # Parent class for buttons
 class Button:

@@ -120,6 +120,12 @@ class IOT:
             # Get command data
             cmd = self.take()
             cmd = cmd.split(" ")
+
+            # Check length to prevent crashing
+            if len(cmd) < 2:
+                print("Command corrupted")
+                continue
+
             sender = cmd[0]
             args = cmd[2:]
             cmd = cmd[1]
