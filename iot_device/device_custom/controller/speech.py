@@ -3,7 +3,9 @@
 
 # Imports
 import os
+import sys
 import speech_recognition as sr
+sys.path.insert(0, "../..")
 import iot
 
 # Initialize IOT
@@ -11,7 +13,8 @@ device = iot.IOT("controller", "192.168.1.97", 5623)
 device.start()
 
 def shutdown():
-	os.system("sudo init 0")
+	pass
+	#os.system("sudo init 0")
 
 device.defineCommand("shutdown", shutdown)
 
@@ -29,18 +32,29 @@ try:
 
 		# Process data
 		try:
-			text = r.recognize_google(audio)
-			print("Heard:", text)
+			text = str(r.recognize_google(audio)).lower()
+			print("Heard:", repr(text))
 
 			# Check as command
-			if True:
+			if "turn on lights" in text:
 				print("Sending data")
-				device.give(text)
+				device.give("route rfcontrol send_code on")
 				reply = device.take()
 
 				if reply == "end":
 					device.stop()
 					break
+			elif "turn off lights" in text:
+				print("Sending off command")
+				device.give("route rfcontrol send_code off")
+				reply = device.take()
+
+				if reply == "end":
+					device.stop()
+					break
+			else:
+				print("Doesnt match any")
+
 		except sr.UnknownValueError:
 			print("Couldnt be understood")
 		except sr.RequestError as e:
