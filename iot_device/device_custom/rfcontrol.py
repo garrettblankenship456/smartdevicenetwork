@@ -64,7 +64,7 @@ dataThread = threading.Thread(target=receiveData, args=())
 dataThread.start()
 
 # Define command functions
-def transmitDecimal(args):
+def transmitDecimal(args, sender):
     # Transmits the code with given parameters
     print("Transmitting code!")
     rfTrans.tx_code(int(args[0]), int(args[1]), int(args[2]))
@@ -93,7 +93,7 @@ def addCode(args, sender):
     }
     writeCodes(codes)
 
-def sendCode(args):
+def sendCode(args, sender):
     # Get code list
     codes = getCodes()
 
@@ -104,9 +104,9 @@ def sendCode(args):
 
     # Send pulse
     print("Transmitting code:", codeData)
-    transmitDecimal([codeData["code"], codeData["proto"], codeData["pulse"]])
+    transmitDecimal([codeData["code"], codeData["proto"], codeData["pulse"]], sender)
 
-def sendLastCode(args):
+def sendLastCode(args, sender):
     # Skip if no last code
     if lastCodeReceived == None:
         print("No valid code.")
@@ -114,7 +114,7 @@ def sendLastCode(args):
 
     # Send the TX of the last code
     print("Transmitting code:", lastCodeReceived)
-    transmitDecimal([lastCodeReceived, 1, 180])
+    transmitDecimal([lastCodeReceived, 1, 180], sender)
 
 # Initialize IOT
 rfIOT = iot.IOT("rfcontrol", "iotserver", 5623) # Define the ID, first argument is IP, second argument is the port

@@ -21,20 +21,20 @@ strip = Adafruit_NeoPixel(LED_COUNT, LED_PIN, LED_FREQ_HZ, LED_DMA, LED_INVERT, 
 strip.begin()
 
 # Define functions
-def colorWipe(args):
+def colorWipe(args, sender):
     print("LEDs clearing")
     color = Color(int(args[0]), int(args[1]), int(args[2]))
     for i in range(strip.numPixels()):
         strip.setPixelColor(i, color)
         strip.show()
         sleep(0.1)
-def ledOn(args):
+def ledOn(args, sender):
     print("Turning on LEDS")
     color = Color(int(args[0]), int(args[1]), int(args[2]))
     for i in args[3:]:
         strip.setPixelColor(int(i), color)
     strip.show()
-def clear(args):
+def clear(args, sender):
     print("LEDs clearing")
     for i in range(strip.numPixels()):
         strip.setPixelColor(i, Color(0, 0, 0))

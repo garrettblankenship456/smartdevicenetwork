@@ -9,15 +9,15 @@ import iot
 os.system("gpio -g mode 18 out")
 
 # Define functions
-def led_on(args):
+def led_on(args, sender):
     print("LED on")
     os.system("gpio -g write 18 1")
 
-def led_off(args):
+def led_off(args, sender):
     print("LED off")
     os.system("gpio -g write 18 0")
 
-def led(args):
+def led(args, sender):
     print("LED control")
 
     if args[0] == "1":
