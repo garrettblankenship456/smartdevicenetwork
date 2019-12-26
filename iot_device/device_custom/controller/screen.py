@@ -153,7 +153,7 @@ class Push(Button):
         self.shape.setFill(color_rgb(180, 180, 180))
 
         # Call the function
-        self.function()
+        self.function(self.name)
 
         # Return color
         self.shape.setFill("white")
@@ -177,10 +177,10 @@ class Toggle(Button):
         # Call the function based on the state
         if self.state:
             self.shape.setFill("white")
-            success = self.offFunction()
+            success = self.offFunction(self.name)
         else:
             self.shape.setFill(color_rgb(180, 180, 180))
-            success = self.onFunction()
+            success = self.onFunction(self.name)
 
         # Toggle state if the commands were successful
         if success:

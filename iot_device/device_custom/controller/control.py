@@ -15,12 +15,12 @@ import iot # pylint: disable=import-error
 device = iot.IOT("controller", "192.168.1.97", 5623)
 
 # Functions
-def lightsOn():
+def lightsOn(cmd):
     # Sends lights on command to rf controller
     device.give("route rfcontrol send_code on")
     return device.take() == "sent"
 
-def lightsOff():
+def lightsOff(cmd):
     # Send lights off command to rf controller
     device.give("route rfcontrol send_code off")
     return device.take() == "sent"
