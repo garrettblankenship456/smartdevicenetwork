@@ -86,10 +86,11 @@ var server = net.createServer((socket) => {
         // Get the data from the given command
         var sender = id;
         var destination = data.split(" ")[1];
-        var command = data.split(" ").slice(2).join(" ");
 
-        // Add sender to the list
+        // Create command
+        var command = data.split(" ").slice(2);
         command.unshift(sender);
+        command.join(" ");
 
         console.log("Routing command from '" + sender + "', destination: '" + destination + "' with the command '" + command + "'");
 
