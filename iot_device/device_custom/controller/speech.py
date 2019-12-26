@@ -6,7 +6,7 @@ import os
 import sys
 import speech_recognition as sr
 sys.path.insert(0, "../..")
-import iot
+import iot # pylint: disable=import-error
 
 # Initialize IOT
 device = iot.IOT("controller", "192.168.1.97", 5623)
