@@ -40,20 +40,20 @@ class Screen:
             # Get button to modify
             button = self.buttons[i]
 
-            # Move button into position
-            button.setPos(10 + (BUTTON_SIZE_X + BUTTON_PADDING) * column, 50 + (BUTTON_SIZE_Y + BUTTON_PADDING) * row)
-            button.text = Text(button.shape.getCenter(), button.name)
-
             # Draw the button shape
             button.shape.draw(self.window)
             button.text.draw(self.window)
 
-            # Increment row and or column
-            column += 1
+            if button.gridAligned:
+                # Set button position
+                button.setPos(10 + (BUTTON_SIZE_X + BUTTON_PADDING) * column, 50 + (BUTTON_SIZE_Y + BUTTON_PADDING) * row)
 
-            if column >= self.window.getWidth() // (BUTTON_SIZE_X + BUTTON_PADDING):
-                column = 0
-                row += 1
+                # Increment row and or column
+                column += 1
+
+                if column >= self.window.getWidth() // (BUTTON_SIZE_X + BUTTON_PADDING):
+                    column = 0
+                    row += 1
 
     def undrawButtons(self):
         """Undraw all the buttons"""
@@ -114,14 +114,20 @@ class Screen:
 
 # Parent class for buttons
 class Button:
-    def __init__(self, name:str):
+    def __init__(self, name:str, gridAligned:bool):
         # Initialize
         self.name = name
         self.shape = Rectangle(Point(0, 0), Point(BUTTON_SIZE_X, BUTTON_SIZE_Y))
         self.text = Text(self.shape.getCenter(), name)
+        self.gridAligned = gridAligned
 
         # Set colors
         self.shape.setFill("white")
+
+    # Draw function
+    def draw(self, window):
+        self.shape.draw(window)
+        self.text.draw(window)
 
     # Set position function
     def setPos(self, x, y):
@@ -142,9 +148,9 @@ class Button:
 # Children classes for buttons and the different types
 class Push(Button):
     """Push button, executes one function when pressed"""
-    def __init__(self, name:str, function):
+    def __init__(self, name:str, function, gridAligned:bool = True):
         # Initialize
-        super().__init__(name)
+        super().__init__(name, gridAligned)
         self.function = function
 
     # Define the use
@@ -160,9 +166,9 @@ class Push(Button):
 
 class Toggle(Button):
     """Toggle button, two functions executed one for on and one for off"""
-    def __init__(self, name:str, onFunction, offFunction, initalState:bool = False):
+    def __init__(self, name:str, onFunction, offFunction, initalState:bool = False, gridAligned:bool = True):
         # Initialize
-        super().__init__(name)
+        super().__init__(name, gridAligned)
         self.onFunction = onFunction
         self.offFunction = offFunction
 
