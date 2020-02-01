@@ -35,16 +35,6 @@ def writeCodes(data:dict):
     dataFile.write(data)
     dataFile.close()
 
-def lightsOn(cmd):
-    # Sends lights on command to rf controller
-    device.give("route rfcontrol send_code on")
-    return device.take() == "sent"
-
-def lightsOff(cmd):
-    # Send lights off command to rf controller
-    device.give("route rfcontrol send_code off")
-    return device.take() == "sent"
-
 def sendAdd(cmd):
     # Opens new window to ask the user for input about the new code
     codeWindow = GraphWin("Add button", 500, 375)
@@ -162,7 +152,7 @@ def sendAdd(cmd):
 def keypress(cmd):
     # Send the id to the controller
     device.give("route rfcontrol send_code " + cmd.replace(" ", "_"))
-    device.take()
+    return device.take() == "sent"
 
 def shutdown(cmd):
     # Closes program and turns off computer
