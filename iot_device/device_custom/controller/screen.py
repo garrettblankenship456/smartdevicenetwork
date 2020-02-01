@@ -183,10 +183,10 @@ class Toggle(Button):
         # Call the function based on the state
         if self.state:
             self.shape.setFill("white")
-            success = self.offFunction(self.name)
+            success = self.offFunction(self.name + "_off")
         else:
             self.shape.setFill(color_rgb(180, 180, 180))
-            success = self.onFunction(self.name)
+            success = self.onFunction(self.name + "_on")
 
         # Toggle state if the commands were successful
         if success:

@@ -4,6 +4,7 @@
 # Imports
 import os
 import sys
+import json
 import speech_recognition as sr
 from graphics import *
 
@@ -16,6 +17,24 @@ import iot # pylint: disable=import-error
 device = iot.IOT("controller", "192.168.1.97", 5623)
 
 # Functions
+def getCodes():
+    # Returns all the codes in the json
+    dataFile = open("codes.json", "r")
+    data = dataFile.read()
+    data = json.loads(data)
+
+    dataFile.close()
+
+    return data
+
+def writeCodes(data:dict):
+    # Writes the data to the json file
+    dataFile = open("codes.json", "w")
+    data = json.dumps(data)
+    
+    dataFile.write(data)
+    dataFile.close()
+
 def lightsOn(cmd):
     # Sends lights on command to rf controller
     device.give("route rfcontrol send_code on")
@@ -61,8 +80,11 @@ def sendAdd(cmd):
                 # Its been pressed
                 break
 
+    # Get the id of the code, which is what the command will be stored as
+    codeID = codeName.getText().replace(" ", "_")
+    
     # Tell device to listen
-    device.give("route rfcontrol add_code " + codeName.getText().replace(" ", "_"))
+    device.give("route rfcontrol add_code " + codeID)
     res = device.take()
 
     # End if it doesnt work
@@ -81,8 +103,14 @@ def sendAdd(cmd):
     # Accept function
     def buttonAccept(cmd):
         if cmd == "Yes":
+            # Tell device to save the code
             device.give("route rfcontrol accepted")
             device.take()
+
+            # Save the code on the controller
+            codes = getCodes()
+            codes[codeID] = "Toggle"
+            writeCodes(codes) 
         else:
             device.give("route rfcontrol denied")
             device.take()
@@ -131,6 +159,11 @@ def sendAdd(cmd):
     # Close window
     codeWindow.close()
 
+def keypress(cmd):
+    # Send the id to the controller
+    device.give("route rfcontrol send_code " + cmd.replace(" ", "_"))
+    device.take()
+
 def shutdown(cmd):
     # Closes program and turns off computer
     device.stop()
@@ -143,7 +176,6 @@ def main():
 
     # Initializze screen and buttons
     s = screen.Screen(1280, 720)
-    sendAdd("X")
 
     # Function buttons
     addCodeButton = screen.Push("Add", sendAdd, False)
@@ -155,7 +187,15 @@ def main():
     s.addButton(addCodeButton)
 
     # Buttons
-    s.addButton(screen.Toggle("Lights", lightsOn, lightsOff))
+    # Read data from codes file
+    codes = getCodes()
+
+    # Loop over each code and make a button
+    for key in codes:
+        if codes[key] == "Toggle":
+            s.addButton(screen.Toggle(key, keypress, keypress))
+        elif codes[key] == "Push":
+            s.addButton(screen.Push(key, keypress))
 
     # Button press loop
     while True:

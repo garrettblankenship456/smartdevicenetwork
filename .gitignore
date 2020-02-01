@@ -2,4 +2,4 @@ server/node_modules
 compiled/
 */__pycache__
 *.pyc
-iot_device/device_custom/codes.json
+iot_device/device_custom/controller/codes.json
